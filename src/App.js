@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import NewTodoForm from "./NewTodoForm";
+import TodoList from "./TodoList";
 import "./App.css";
 
 class App extends Component {
@@ -21,6 +22,7 @@ class App extends Component {
     };
     this.formSubmitted = this.formSubmitted.bind(this);
     this.toggleTodoDone = this.toggleTodoDone.bind(this);
+    this.newTodoChanged = this.newTodoChanged.bind(this);
   }
 
   newTodoChanged(event) {
@@ -87,45 +89,17 @@ class App extends Component {
     return (
       <div className="App">
         <h1>{this.state.message}</h1>
-        <form onSubmit={this.formSubmitted}>
-          <label htmlFor="newTodo">New Todo</label>
-          <input
-            onChange={this.newTodoChanged.bind(this)}
-            id="newTodo"
-            name="newTodo"
-            value={this.state.newTodo}
-          />
-          <button type="submit">Submit</button>
-        </form>
+        <NewTodoForm
+          newTodo={this.state.newTodo}
+          formSubmitted={this.formSubmitted}
+          newTodoChanged={this.newTodoChanged}
+        />
         <button onClick={() => this.allDone()}>All Done</button>
-        <ul>
-          {this.state.todos.map((todo, index) => {
-            return (
-              <li key={index}>
-                <input
-                  onChange={event => this.toggleTodoDone(event, index)}
-                  type="checkbox"
-                  checked={todo.done}
-                />
-                <span
-                  style={{
-                    textDecoration: todo.done ? "line-through" : "inherit"
-                  }}
-                >
-                  {todo.title}
-                </span>
-                <button
-                  style={{ marginLeft: "10px" }}
-                  onClick={() => {
-                    this.removeTodo(index);
-                  }}
-                >
-                  X
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <TodoList
+          todos={this.state.todos}
+          toggleTodoDone={this.toggleTodoDone}
+          removeTodo={this.removeTodo.bind(this)}
+        />
       </div>
     );
   }
